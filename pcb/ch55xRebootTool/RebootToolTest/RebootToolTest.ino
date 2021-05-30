@@ -49,6 +49,18 @@ void loop() {
   __xdata uint32_t currentBaudRate = *((__xdata uint32_t *)LineCoding); //both linecoding and sdcc are little-endian
   __xdata uint8_t currentLineState = controlLineState; //both linecoding and sdcc are little-endian
 
+  while (USBSerial_available()) {
+    char serialChar = USBSerial_read();
+    Serial0_write(serialChar);
+  }
+  Serial0_flush();
+
+  while (Serial0_available()) {
+    char serialChar = Serial0_read();
+    USBSerial_write(serialChar);
+  }
+  USBSerial_flush();
+
   if (oldBaudRate != currentBaudRate) {
     oldBaudRate = currentBaudRate;
     Serial0_begin(currentBaudRate);
