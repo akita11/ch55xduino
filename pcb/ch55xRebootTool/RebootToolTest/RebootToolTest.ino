@@ -12,6 +12,9 @@ __xdata uint8_t oldLineState = 0;
 #define POWER_TARGET_PIN 34
 #define USBDP_PULLUP_TARGET_PIN 14
 
+#define SENSE_TARGET_SWTICH_PERF 17
+#define POWER_PERF_PIN 11
+
 void bootloaderRoutine() {
   USB_CTRL = 0;
   EA = 0;                                                                    //Disabling all interrupts is required.
@@ -33,6 +36,11 @@ void setup() {
   pinMode(USBDP_PULLUP_TARGET_PIN, OUTPUT);
   digitalWrite(USBDP_PULLUP_TARGET_PIN, HIGH);
 
+  pinMode(SENSE_TARGET_SWTICH_PERF, INPUT_PULLUP);
+
+  pinMode(POWER_PERF_PIN, OUTPUT);
+  digitalWrite(POWER_PERF_PIN, HIGH);
+
   Serial0_begin(9600);
 
 }
@@ -49,13 +57,15 @@ void loop() {
   if (oldLineState != currentLineState) {
     if  ( ((currentLineState & 0x01) == 0) && ((oldLineState & 0x01) == 1)) {
       if (currentBaudRate == 1200) {
-        digitalWrite(POWER_TARGET_PIN, HIGH);
+        digitalWrite(POWER_TARGET_PIN, HIGH); //Cut target power
+        digitalWrite(POWER_PERF_PIN, HIGH); //Cut peripheral power
+        digitalWrite(USB_SWITCH_PIN, LOW);  //connect target to computer USB
         delay(100);
-        digitalWrite(USBDP_PULLUP_TARGET_PIN, LOW);
+        digitalWrite(USBDP_PULLUP_TARGET_PIN, LOW); //Connect pull up resistor to target
         delay(10);
-        digitalWrite(POWER_TARGET_PIN, LOW);
+        digitalWrite(POWER_TARGET_PIN, LOW); //Restore target power
         delay(10);
-        digitalWrite(USBDP_PULLUP_TARGET_PIN, HIGH);
+        digitalWrite(USBDP_PULLUP_TARGET_PIN, HIGH); //Disconnect pull up resistor to target
       }
     }
     oldLineState = currentLineState;
@@ -66,6 +76,14 @@ void loop() {
     if (digitalRead(15) == LOW) {
       bootloaderRoutine();
     }
+  }
+
+  if (digitalRead(SENSE_TARGET_SWTICH_PERF)) {
+    digitalWrite(POWER_PERF_PIN, HIGH); //Cut peripheral power
+    digitalWrite(USB_SWITCH_PIN, LOW);  //connect target to computer USB
+  } else {
+    digitalWrite(POWER_PERF_PIN, LOW); //Set peripheral power
+    digitalWrite(USB_SWITCH_PIN, HIGH);  //connect target to peripheral USB
   }
 
 }
