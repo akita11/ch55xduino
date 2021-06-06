@@ -8063,12 +8063,31 @@ chip</description>
 <text x="-2.54" y="-5.08" size="1.778" layer="96" rot="R90">&gt;VALUE</text>
 <pin name="+5V" x="0" y="-2.54" visible="off" length="short" direction="sup" rot="R90"/>
 </symbol>
+<symbol name="VCC" urn="urn:adsk.eagle:symbol:26928/1" library_version="1">
+<wire x1="1.27" y1="-1.905" x2="0" y2="0" width="0.254" layer="94"/>
+<wire x1="0" y1="0" x2="-1.27" y2="-1.905" width="0.254" layer="94"/>
+<text x="-2.54" y="-2.54" size="1.778" layer="96" rot="R90">&gt;VALUE</text>
+<pin name="VCC" x="0" y="-2.54" visible="off" length="short" direction="sup" rot="R90"/>
+</symbol>
 </symbols>
 <devicesets>
 <deviceset name="+5V" urn="urn:adsk.eagle:component:26963/1" prefix="P+" library_version="1">
 <description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;</description>
 <gates>
 <gate name="1" symbol="+5V" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="VCC" urn="urn:adsk.eagle:component:26957/1" prefix="P+" library_version="1">
+<description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;</description>
+<gates>
+<gate name="VCC" symbol="VCC" x="0" y="0"/>
 </gates>
 <devices>
 <device name="">
@@ -10702,14 +10721,11 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <attribute name="LCSC" value="C151162"/>
 </part>
 <part name="GND1" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="GND" device=""/>
-<part name="P+1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
-<part name="P+2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
 <part name="SUPPLY1" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="3.3V" device=""/>
 <part name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805K" package3d_urn="urn:adsk.eagle:package:23681/2" value="0.1uF">
 <attribute name="LCSC" value="C16834"/>
 </part>
 <part name="R1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="20K"/>
-<part name="P+3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
 <part name="GND3" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="GND" device=""/>
 <part name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="20K"/>
 <part name="U2" library="myOwnLib" deviceset="MY_IC_CH551G_CH552G" device="SOP-16" value="CH552G">
@@ -10720,8 +10736,6 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <part name="J2" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:513" deviceset="CONN_07" device="NO_SILK" package3d_urn="urn:adsk.eagle:package:38136/1"/>
 <part name="GND4" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="GND" device=""/>
 <part name="GND5" library="SparkFun-PowerSymbols" library_urn="urn:adsk.eagle:library:530" deviceset="GND" device=""/>
-<part name="P+4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
-<part name="P+5" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+5V" device=""/>
 <part name="TP1" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:513" deviceset="TEST-POINT" device="3X4" package3d_urn="urn:adsk.eagle:package:38287/1"/>
 <part name="TP2" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:513" deviceset="TEST-POINT" device="3X4" package3d_urn="urn:adsk.eagle:package:38287/1"/>
 <part name="S1" library="SparkFun-Switches" library_urn="urn:adsk.eagle:library:535" deviceset="MOMENTARY-SWITCH-SPST" device="-SMD-6.2MM-TALL" package3d_urn="urn:adsk.eagle:package:40172/1"/>
@@ -10787,6 +10801,11 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <part name="USB5" library="USB connector" library_urn="urn:adsk.eagle:library:19787754" deviceset="292303-1" device="" package3d_urn="urn:adsk.eagle:package:19576313/5">
 <attribute name="LCSC" value="C2345"/>
 </part>
+<part name="P+1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
+<part name="P+3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
+<part name="P+5" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
+<part name="P+2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
+<part name="P+4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -10806,12 +10825,6 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <instance part="GND1" gate="1" x="93.98" y="2.54" smashed="yes">
 <attribute name="VALUE" x="93.98" y="2.286" size="1.778" layer="96" align="top-center"/>
 </instance>
-<instance part="P+1" gate="1" x="71.12" y="30.48" smashed="yes">
-<attribute name="VALUE" x="68.58" y="33.02" size="1.778" layer="96"/>
-</instance>
-<instance part="P+2" gate="1" x="93.98" y="30.48" smashed="yes">
-<attribute name="VALUE" x="96.52" y="27.94" size="1.778" layer="96"/>
-</instance>
 <instance part="SUPPLY1" gate="G$1" x="88.9" y="33.02" smashed="yes">
 <attribute name="VALUE" x="88.9" y="35.814" size="1.778" layer="96" align="bottom-center"/>
 </instance>
@@ -10823,9 +10836,6 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <instance part="R1" gate="G$1" x="109.22" y="55.88" smashed="yes">
 <attribute name="NAME" x="105.41" y="57.3786" size="1.778" layer="95"/>
 <attribute name="VALUE" x="105.41" y="52.578" size="1.778" layer="96"/>
-</instance>
-<instance part="P+3" gate="1" x="50.8" y="60.96" smashed="yes">
-<attribute name="VALUE" x="53.34" y="60.96" size="1.778" layer="96"/>
 </instance>
 <instance part="GND3" gate="1" x="78.74" y="53.34" smashed="yes">
 <attribute name="VALUE" x="78.74" y="53.086" size="1.778" layer="96" align="top-center"/>
@@ -10856,12 +10866,6 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 </instance>
 <instance part="GND5" gate="1" x="60.96" y="-20.32" smashed="yes">
 <attribute name="VALUE" x="60.96" y="-20.574" size="1.778" layer="96" align="top-center"/>
-</instance>
-<instance part="P+4" gate="1" x="63.5" y="-15.24" smashed="yes" rot="R270">
-<attribute name="VALUE" x="63.5" y="-17.78" size="1.778" layer="96"/>
-</instance>
-<instance part="P+5" gate="1" x="129.54" y="58.42" smashed="yes">
-<attribute name="VALUE" x="132.08" y="58.42" size="1.778" layer="96"/>
 </instance>
 <instance part="TP1" gate="G$1" x="66.04" y="22.86" smashed="yes">
 <attribute name="NAME" x="73.66" y="22.86" size="1.778" layer="95" font="vector"/>
@@ -11032,6 +11036,21 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <attribute name="VALUE" x="147.32" y="-94.488" size="1.778" layer="96" rot="MR0"/>
 <attribute name="LCSC" x="142.24" y="-81.28" size="1.778" layer="96" rot="MR0" display="off"/>
 </instance>
+<instance part="P+1" gate="VCC" x="71.12" y="30.48" smashed="yes">
+<attribute name="VALUE" x="68.58" y="27.94" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="P+3" gate="VCC" x="50.8" y="60.96" smashed="yes">
+<attribute name="VALUE" x="48.26" y="58.42" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="P+5" gate="VCC" x="129.54" y="58.42" smashed="yes">
+<attribute name="VALUE" x="127" y="55.88" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="P+2" gate="VCC" x="93.98" y="30.48" smashed="yes">
+<attribute name="VALUE" x="91.44" y="27.94" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="P+4" gate="VCC" x="71.12" y="-15.24" smashed="yes" rot="R270">
+<attribute name="VALUE" x="68.58" y="-12.7" size="1.778" layer="96"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -11179,37 +11198,6 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 </segment>
 </net>
 <net name="+5V" class="0">
-<segment>
-<pinref part="F1" gate="G$1" pin="2"/>
-<wire x1="68.58" y1="25.4" x2="71.12" y2="25.4" width="0.1524" layer="91"/>
-<pinref part="P+1" gate="1" pin="+5V"/>
-<wire x1="71.12" y1="25.4" x2="71.12" y2="27.94" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<wire x1="96.52" y1="25.4" x2="93.98" y2="25.4" width="0.1524" layer="91"/>
-<pinref part="P+2" gate="1" pin="+5V"/>
-<wire x1="93.98" y1="25.4" x2="93.98" y2="27.94" width="0.1524" layer="91"/>
-<pinref part="C1" gate="G$1" pin="1"/>
-<wire x1="93.98" y1="25.4" x2="93.98" y2="22.86" width="0.1524" layer="91"/>
-<junction x="93.98" y="25.4"/>
-<pinref part="U2" gate="G$1" pin="VCC"/>
-</segment>
-<segment>
-<pinref part="P+3" gate="1" pin="+5V"/>
-<wire x1="50.8" y1="58.42" x2="50.8" y2="55.88" width="0.1524" layer="91"/>
-<pinref part="R2" gate="G$1" pin="1"/>
-<wire x1="50.8" y1="55.88" x2="53.34" y2="55.88" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="J2" gate="G$1" pin="2"/>
-<wire x1="58.42" y1="-15.24" x2="60.96" y2="-15.24" width="0.1524" layer="91"/>
-<pinref part="P+4" gate="1" pin="+5V"/>
-</segment>
-<segment>
-<wire x1="127" y1="55.88" x2="129.54" y2="55.88" width="0.1524" layer="91"/>
-<pinref part="P+5" gate="1" pin="+5V"/>
-<pinref part="S1" gate="G$1" pin="2"/>
-</segment>
 <segment>
 <pinref part="IC1" gate="P" pin="VCC"/>
 <pinref part="P+6" gate="1" pin="+5V"/>
@@ -11568,6 +11556,39 @@ Feel free to contact us at &lt;a href="mailto:Support@PCBLayout.com"&gt;Support@
 <wire x1="106.68" y1="-66.04" x2="106.68" y2="-68.58" width="0.1524" layer="91"/>
 <pinref part="R5" gate="G$1" pin="1"/>
 <wire x1="106.68" y1="-68.58" x2="109.22" y2="-68.58" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="VCC" class="0">
+<segment>
+<pinref part="F1" gate="G$1" pin="2"/>
+<wire x1="68.58" y1="25.4" x2="71.12" y2="25.4" width="0.1524" layer="91"/>
+<wire x1="71.12" y1="25.4" x2="71.12" y2="27.94" width="0.1524" layer="91"/>
+<pinref part="P+1" gate="VCC" pin="VCC"/>
+</segment>
+<segment>
+<wire x1="50.8" y1="58.42" x2="50.8" y2="55.88" width="0.1524" layer="91"/>
+<pinref part="R2" gate="G$1" pin="1"/>
+<wire x1="50.8" y1="55.88" x2="53.34" y2="55.88" width="0.1524" layer="91"/>
+<pinref part="P+3" gate="VCC" pin="VCC"/>
+</segment>
+<segment>
+<wire x1="127" y1="55.88" x2="129.54" y2="55.88" width="0.1524" layer="91"/>
+<pinref part="S1" gate="G$1" pin="2"/>
+<pinref part="P+5" gate="VCC" pin="VCC"/>
+</segment>
+<segment>
+<wire x1="96.52" y1="25.4" x2="93.98" y2="25.4" width="0.1524" layer="91"/>
+<wire x1="93.98" y1="25.4" x2="93.98" y2="27.94" width="0.1524" layer="91"/>
+<pinref part="C1" gate="G$1" pin="1"/>
+<wire x1="93.98" y1="25.4" x2="93.98" y2="22.86" width="0.1524" layer="91"/>
+<junction x="93.98" y="25.4"/>
+<pinref part="U2" gate="G$1" pin="VCC"/>
+<pinref part="P+2" gate="VCC" pin="VCC"/>
+</segment>
+<segment>
+<pinref part="J2" gate="G$1" pin="2"/>
+<wire x1="58.42" y1="-15.24" x2="68.58" y2="-15.24" width="0.1524" layer="91"/>
+<pinref part="P+4" gate="VCC" pin="VCC"/>
 </segment>
 </net>
 </nets>
