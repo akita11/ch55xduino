@@ -1,1 +1,0 @@
-use separate 5V for CH552 and target
