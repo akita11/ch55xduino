@@ -22,9 +22,9 @@
 /*
  * This calculation determines how many DELAY loop iterations are needed to stretch out a bit's cycle period to at least 1.25uS.
  * It will stretch the low time for a '0' bit, and the high time for a '1' bit.
- * Roughly this calculates how many actual instruction cycles are in the 1.25uS full bit period (based on F_CPU),
- *  and then subtracts the 13 instruction cycles that are already spent outside the DELAY loop,
- *  and then divides by 4, the number of instruction cycles per DELAY loop iteration.
+ * Roughly this calculates how many actual clock cycles are in the 1.25uS full bit period (based on F_CPU),
+ *  and then subtracts the 13 clock cycles that are already spent outside the DELAY loop,
+ *  and then divides by 4, the number of clock cycles per DELAY loop iteration.
  * It uses larger numbers than would at first seem necessary in order to avoid integer math truncation errors.
  */
 #define WS2812_DELAY_CALC	((((F_CPU/1000L)*1250L)-13000000L)/4)
