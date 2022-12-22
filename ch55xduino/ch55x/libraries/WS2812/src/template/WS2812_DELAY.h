@@ -13,10 +13,10 @@
 #define _WS2812_DELAY_H_INCLUDED
 
 #if !defined(_STRINGIFY)
-	#define _STRINGIFY(x)         #x
+  #define _STRINGIFY(x)         #x
 #endif
 #if !defined(_STR)
-	#define _STR(x)               _STRINGIFY(x)
+  #define _STR(x)               _STRINGIFY(x)
 #endif
 
 /*

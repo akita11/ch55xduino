@@ -62,11 +62,11 @@ void neopixel_show_long_P1_1(uint32_t dataAndLen) {
            "    jc bit7High$                        \n" // [2,2/4|5]
            "    clr _P1_1                           \n" // [2,2]
            "bit7High$:                              \n"
-	#if WS2812_DELAY > 0
+  #if WS2812_DELAY > 0
            "    mov r1,#"_STR(WS2812_DELAY)"        \n" // [2,2] delay 4 clock cycles per iteration
            "bitDelay$:                              \n"
            "    djnz r1,bitDelay$                   \n" // [2,2/4|5|6]
-	#endif
+  #endif
 #else // F_CPU between 4 MHz and 8 MHz
            "    jnc bit7Low$                        \n" // [2,2/4|5]
            "    setb _P1_1                          \n" // [2,2]
