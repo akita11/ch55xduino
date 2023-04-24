@@ -23,7 +23,7 @@ volatile __xdata uint8_t controlLineState = 0;
 
 __xdata uint8_t usbWritePointer = 0;
 
-void delayMicroseconds(uint16_t us);
+void delayMicroseconds(__data uint16_t us);
 
 void resetCDCParameters(){
 
@@ -32,7 +32,7 @@ void resetCDCParameters(){
 }
 
 void setLineCodingHandler(){
-    for (uint8_t i=0;i<((LINE_CODEING_SIZE<=USB_RX_LEN)?LINE_CODEING_SIZE:USB_RX_LEN);i++){
+    for (__data uint8_t i=0;i<((LINE_CODEING_SIZE<=USB_RX_LEN)?LINE_CODEING_SIZE:USB_RX_LEN);i++){
         LineCoding[i] = Ep0Buffer[i];
     }
     
@@ -40,10 +40,10 @@ void setLineCodingHandler(){
 }
 
 uint16_t getLineCodingHandler(){
-    uint16_t returnLen;
+    __data uint16_t returnLen;
 
     returnLen = LINE_CODEING_SIZE;
-    for (uint8_t i=0;i<returnLen;i++){
+    for (__data uint8_t i=0;i<returnLen;i++){
         Ep0Buffer[i] = LineCoding[i];
     }
 
@@ -84,7 +84,7 @@ void setControlLineStateHandler(){
 }
 
 bool USBSerial(){
-    bool result = false;
+    __data bool result = false;
     if (controlLineState > 0)
         result = true;
     //delay(10); not doing it for now
@@ -101,8 +101,8 @@ void USBSerial_flush(void){
     }
 }
 
-uint8_t USBSerial_write(char c){  //3 bytes generic pointer
-    uint16_t waitWriteCount;
+uint8_t USBSerial_write(__data char c){  //3 bytes generic pointer
+    __data uint16_t waitWriteCount;
     if (controlLineState > 0) {
         while (true){
             waitWriteCount = 0;
@@ -124,7 +124,7 @@ uint8_t USBSerial_write(char c){  //3 bytes generic pointer
 }
 
 uint8_t USBSerial_print_n(uint8_t * __xdata buf, __xdata int len){  //3 bytes generic pointer, not using USBSerial_write for a bit efficiency
-    uint16_t waitWriteCount;
+    __data uint16_t waitWriteCount;
     if (controlLineState > 0) {
         while (len>0){
             waitWriteCount = 0;
@@ -154,7 +154,7 @@ uint8_t USBSerial_available(){
 
 char USBSerial_read(){
     if(USBByteCountEP2==0) return 0;
-    char data = Ep2Buffer[USBBufOutPointEP2];
+    __data char data = Ep2Buffer[USBBufOutPointEP2];
     USBBufOutPointEP2++;
     USBByteCountEP2--;
     if(USBByteCountEP2==0) {

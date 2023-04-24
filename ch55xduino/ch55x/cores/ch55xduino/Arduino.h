@@ -166,28 +166,28 @@ void init(void);
 //void serialEvent(void);		// weak
 //extern unsigned char runSerialEvent;
 
-void pinMode(uint8_t pin, __xdata uint8_t mode);
-void digitalWrite(uint8_t pin, __xdata uint8_t val);
-uint8_t digitalRead(uint8_t pin);
+void pinMode(__data uint8_t pin, __xdata uint8_t mode);
+void digitalWrite(__data uint8_t pin, __xdata uint8_t val);
+uint8_t digitalRead(__data uint8_t pin);
 #if defined(CH559)
-uint16_t analogRead(uint8_t pin);
+uint16_t analogRead(__data uint8_t pin);
 #else
-uint8_t analogRead(uint8_t pin);
+uint8_t analogRead(__data uint8_t pin);
 #endif
-void analogWrite(uint8_t pin, __xdata uint16_t val);
+void analogWrite(__data uint8_t pin, __xdata uint16_t val);
 
 uint32_t millis(void);
 uint32_t micros(void);
-void delay(uint32_t ms);
-void delayMicroseconds(uint16_t us);
+void delay(__data uint32_t ms);
+void delayMicroseconds(__data uint16_t us);
 //unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout);
 //unsigned long pulseInLong(uint8_t pin, uint8_t state, unsigned long timeout);
 
 //void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
 //uint8_t shiftIn(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder);
 
-void attachInterrupt(uint8_t interruptNum, void (*userFunc)(void), __xdata uint8_t mode);
-void detachInterrupt(uint8_t interruptNum);
+void attachInterrupt(__data uint8_t interruptNum, __xdata void (*userFunc)(void), __xdata uint8_t mode);
+void detachInterrupt(__data uint8_t interruptNum);
 
 void setup(void);
 void loop(void);
@@ -226,10 +226,10 @@ void loop(void);
 //void noTone(uint8_t _pin);
 
 // WMath prototypes
-long random(long howbig);
-long random_minmax(long howsmall, __xdata long howbig);
-void randomSeed(unsigned long seed);
-long map(long x, __xdata long in_min, __xdata long in_max, __xdata long out_min, __xdata long out_max);
+long random(__data long howbig);
+long random_minmax(__data long howsmall, __xdata long howbig);
+void randomSeed(__data unsigned long seed);
+long map(__data long x, __xdata long in_min, __xdata long in_max, __xdata long out_min, __xdata long out_max);
 
 inline unsigned int makeWord(unsigned char h, unsigned char l) { return (h << 8) | l; }
 
@@ -252,7 +252,7 @@ inline unsigned int makeWord(unsigned char h, unsigned char l) { return (h << 8)
 //USB Serial functions. Don't exist in Arduino AVR core Arduino.h, may be moved later
 bool USBSerial();
 uint8_t USBSerial_print_n(uint8_t * __xdata buf, __xdata int len);
-uint8_t USBSerial_write(char c);
+uint8_t USBSerial_write(__data char c);
 void USBSerial_flush(void);
 uint8_t USBSerial_available();
 char USBSerial_read();
@@ -332,6 +332,6 @@ char USBSerial_read();
 #define eeprom_write_byte(ADDR,VAL) { DPL=(VAL);DPH=(ADDR);eeprom_write_byte_2_params_DPTR(); }
 //SDCC is not efficent to convert 2 8bit data to 1 16bit data, se we use DPTR directly. The mismatch of parameter of the H and C is intentional
 void eeprom_write_byte_2_params_DPTR();
-uint8_t eeprom_read_byte (uint8_t addr);
+uint8_t eeprom_read_byte (__data uint8_t addr);
 
 #endif
