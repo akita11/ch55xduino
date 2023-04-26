@@ -197,6 +197,30 @@ static void turnOffPWM(__data uint8_t pwm)
             }
             break;
     }
+#elif defined(CH559)
+    switch (pwm)
+    {
+        case PIN_PWM1:
+            if ((PIN_FUNC & bPWM1_PIN_X) == 0){
+                PWM_CTRL &= ~bPWM_OUT_EN;
+            }
+            break;
+        case PIN_PWM2:
+            if ((PIN_FUNC & bPWM1_PIN_X) == 0){
+                PWM_CTRL &= ~bPWM2_OUT_EN;
+            }
+            break;
+        case PIN_PWM1_:
+            if ((PIN_FUNC & bPWM1_PIN_X) != 0){
+                PWM_CTRL &= ~bPWM_OUT_EN;
+            }
+            break;
+        case PIN_PWM2_:
+            if ((PIN_FUNC & bPWM1_PIN_X) != 0){
+                PWM_CTRL &= ~bPWM2_OUT_EN;
+            }
+            break;
+    }
 #else
     return;
 #endif
