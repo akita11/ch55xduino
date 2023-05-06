@@ -119,17 +119,9 @@ They are defined in ```genericPrintSelection.h```.
 
 Unlike most modern architectures including AVR, MCS51 has 2 RAM regions, internal data memory, and external data memory. For CH552, the internal one is only 256 bytes, and the external one is 1024 bytes.
 
-CH55xduino uses the default Small Model for SDCC memory models. The small memory model will allocate all variables in internal, directly addressable RAM by default. Variables stored in external RAM must be declared with the ```xdata``` or ```far``` keyword. 
+CH55xduino uses the Large Model for SDCC memory models since version 0.0.17. The Large model will allocate all variables in external RAM by default. Variables stored in internal RAM must be declared with the ```__data``` keyword. 
 
-CH55xduino also put the stack in internal RAM. So there isn't much space left for variables. If your variable doesn't need fast access, use ```__xdata``` when you declare it.  
-
-For example, if you are trying to allocate a lot of space in internal RAM.
-
-```uint8_t testArr[128];```
-
-You will trigger an error. ```?ASlink-Error-Could not get 130 consecutive bytes in internal RAM for area DSEG.``` This can be avoided by using
-
-```__xdata uint8_t testArr[128];```
+CH55xduino put the stack in internal RAM. So there isn't much space left for variables. If your variable does need fast access, use ```__data``` when you declare it.  
 
 For the default Arduino setting, 148 bytes are reserved for USB endpoints. There will be 876 bytes usable for external RAM.
 
