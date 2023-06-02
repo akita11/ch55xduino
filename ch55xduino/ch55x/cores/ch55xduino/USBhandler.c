@@ -86,44 +86,39 @@ void USB_EP0_SETUP(){
                     switch(UsbSetupBuf->wValueH)
                 {
                     case 1:                                                       //Device Descriptor
-                        pDescr = DevDesc;                                         //Put Device Descriptor into outgoing buffer
-                        len = DevDescLen;
+                        pDescr = (__code uint8_t *)DeviceDescriptor;                                         //Put Device Descriptor into outgoing buffer
+                        len = sizeof(USB_Descriptor_Device_t);
                         break;
                     case 2:                                                        //Configure Descriptor
-                        pDescr = CfgDesc;                                       
-                        len = CfgDescLen;
+                        pDescr = (__code uint8_t *)ConfigurationDescriptor;                                       
+                        len = sizeof(USB_Descriptor_Configuration_t);
                         break;
                     case 3:
                         if(UsbSetupBuf->wValueL == 0)
                         {
-                            pDescr = LangDes;
-                            len = LangDesLen;
+                            pDescr = LanguageDescriptor;
                         }
                         else if(UsbSetupBuf->wValueL == 1)
                         {
-                            pDescr = (__code uint8_t *)Manuf_Des;
-                            len = Manuf_DesLen;
+                            pDescr = (__code uint8_t *)ManufacturerDescriptor;
                         }
                         else if(UsbSetupBuf->wValueL == 2)
                         {
-                            pDescr = (__code uint8_t *)Prod_Des;
-                            len = Prod_DesLen;
+                            pDescr = (__code uint8_t *)ProductDescriptor;
                         }
                         else if(UsbSetupBuf->wValueL == 3)
                         {
-                            pDescr = (__code uint8_t *)SerDes;
-                            len = SerDesLen;
+                            pDescr = (__code uint8_t *)SerialDescriptor;
                         }
                         else if(UsbSetupBuf->wValueL == 4)
                         {
-                            pDescr = (__code uint8_t *)CDC_Des;
-                            len = CDC_DesLen;
+                            pDescr = (__code uint8_t *)CDCDescriptor;
                         }
                         else
                         {
-                            pDescr = (__code uint8_t *)SerDes;
-                            len = SerDesLen;
+                            pDescr = (__code uint8_t *)SerialDescriptor;
                         }
+                        len = pDescr[0];
                         break;
                     default:
                         len = 0xff;                                                // Unsupported descriptors or error
@@ -164,7 +159,7 @@ void USB_EP0_SETUP(){
                     {
                         if( ( ( ( uint16_t )UsbSetupBuf->wValueH << 8 ) | UsbSetupBuf->wValueL ) == 0x01 )
                         {
-                            if( CfgDesc[ 7 ] & 0x20 )
+                            if( ConfigurationDescriptor.Config.ConfigAttributes & 0x20 )
                             {
                                 // wake up
                             }
@@ -221,7 +216,7 @@ void USB_EP0_SETUP(){
                     {
                         if( ( ( ( uint16_t )UsbSetupBuf->wValueH << 8 ) | UsbSetupBuf->wValueL ) == 0x01 )
                         {
-                            if( CfgDesc[ 7 ] & 0x20 )
+                            if( ConfigurationDescriptor.Config.ConfigAttributes & 0x20 )
                             {
                                 // suspend
 
