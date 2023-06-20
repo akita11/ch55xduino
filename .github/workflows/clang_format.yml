@@ -1,0 +1,14 @@
+name: run clang format
+
+on: [pull_request, push]
+
+jobs:
+  check_clang:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+   
+    - name: clang format
+      run: python util/run-clang-format.py -r . 
+
