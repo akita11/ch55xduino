@@ -1,5 +1,6 @@
 import os
 import json
+from collections import OrderedDict
 
 thisScriptPath = os.path.dirname(os.path.realpath(__file__))
 indexJsonPath = os.path.join(thisScriptPath, '../../../package_ch55xduino_mcs51_index.json')
@@ -12,7 +13,7 @@ neededUrlFiles = []
 
 #parse index.json
 with open(indexJsonPath, 'r') as f:
-    indexJson = json.load(f)
+    indexJson = json.load(f, object_pairs_hook=OrderedDict)
     print('index.json loaded')
     versionsList = indexJson["packages"][0]["platforms"]
     #just keep the newest version (1st one)
@@ -73,7 +74,7 @@ def iterate_json(json_obj):
 
 iterate_json(indexJson)
 
-savePath = os.path.join(thisScriptPath, 'generatedFiles/package_ch55xduino_mcs51_index_newest_qingcloud.json')
+savePath = os.path.join(thisScriptPath, 'generatedFiles/package_ch55xduino_mcs51_newest_qingcloud_index.json')
 with open(savePath, 'w') as f:
     json.dump(indexJson, f, indent=4)
     print('index.json saved to {}'.format(savePath))
