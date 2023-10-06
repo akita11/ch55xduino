@@ -22,7 +22,7 @@ Start the Arduino-IDE. In *File->Preferences*, *Settings* tab, enter
 
 ### Installation without direct Github access
 
-If you can not access github directly, use this link to CORS server located in Beijing.
+If you can not access github directly, use this link to COS server located in Beijing.
 
 如果你无法直接连接Github下载Arduino支持包，请在Arduino中使用以下链接。
 
