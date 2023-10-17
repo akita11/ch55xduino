@@ -69,6 +69,14 @@ If you tried to emulate another type of USB device without changing the PID/VID,
 
 By default, Linux will not expose enough permission for Arduino to upload the code with the USB bootloader. Copy ```99-ch55xbl.rules``` in this repo to ```/etc/udev/rules.d/``` and restart your computer. Otherwise, the upload tool may not find the bootloader device.
 
+## Examples for CH55xduino
+
+CH55xduino did not define LED_BUILTIN, A0, A1, etc. So you may encounter compilation errors when the offical Arduino examples are compiled. 
+
+Please use the provided examples in "Examples for CH552 Board" -> "Generic_Examples". 
+
+![location of example](https://raw.githubusercontent.com/DeqingSun/ch55xduino/ch55xduino/docs/exampleLocation.png)
+
 ## Reference board
 
 ![Front image](https://raw.githubusercontent.com/DeqingSun/ch55xduino/ch55xduino/docs/simpleCH552Front.jpg)
