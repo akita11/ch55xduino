@@ -28,6 +28,9 @@ __code uint8_t *__data pDescr;
 
 volatile uint8_t usbMsgFlags = 0; // uint8_t usbMsgFlags copied from VUSB
 
+// 0 is boot protocol, 1 is report protocol
+__xdata uint8_t keyboardProtocol = 1;
+
 inline void NOP_Process(void) {}
 
 void USB_EP0_SETUP() {
@@ -54,7 +57,22 @@ void USB_EP0_SETUP() {
         break;
       }
       case USB_REQ_TYP_CLASS: {
+        // make boot protocol somehow work
         switch (SetupReq) {
+        case HID_GET_PROTOCOL:
+          Ep0Buffer[0] = keyboardProtocol;
+          len = 1;
+          break;
+        case HID_SET_PROTOCOL:
+          keyboardProtocol = UsbSetupBuf->wValueL;
+          break;
+        case HID_SET_IDLE:
+          break;
+        case HID_SET_REPORT:
+          // LED status for caps lock, num lock, scroll lock, etc
+          break;
+        case HID_GET_REPORT:
+          break;
         default:
           len = 0xFF; // command not supported
           break;
@@ -326,10 +344,11 @@ void USB_EP0_IN() {
 }
 
 void USB_EP0_OUT() {
-  {
-    UEP0_T_LEN = 0;
-    UEP0_CTRL |= UEP_R_RES_ACK | UEP_T_RES_NAK; // Respond Nak
+  if ((SetupReq == HID_SET_REPORT)) {
+    // does not care led status for now
   }
+  UEP0_T_LEN = 0;
+  UEP0_CTRL ^= bUEP_R_TOG;
 }
 
 #pragma save
