@@ -151,5 +151,5 @@ void AUDIO_EP1_Out(void) {
   soundBufferPlayBackIndex = 0;
   TR2 = 1;
 
-  UEP1_CTRL = UEP1_CTRL & ~MASK_UEP_T_RES | UEP_T_RES_TOUT;
+  UEP1_CTRL = UEP1_CTRL & ~MASK_UEP_R_RES | UEP_R_RES_TOUT;
 }
