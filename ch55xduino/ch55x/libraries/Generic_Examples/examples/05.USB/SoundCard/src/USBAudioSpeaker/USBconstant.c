@@ -39,7 +39,8 @@ __code uint8_t CfgDesc[] = {
     0x32, // Maximum power consumption of the device in this configuration is
           // 100 mA
 
-    // Interface Association Descriptor, IAD, this packes following 2 interfaces into 1
+    // Interface Association Descriptor, IAD
+    // This packes following 2 interfaces into 1
     0x08,0x0B,0x00,0x02,0x01,0x00,0x00,0x00,
 
     0x09, // Descriptor size is 9 bytes
