@@ -26,7 +26,7 @@ If you can not access github directly, use this link to COS server located in Be
 
 如果你无法直接连接Github下载Arduino支持包，请在Arduino中使用以下链接。
 
-> https://ch55xduino.pek3b.qingstor.com/package_ch55xduino_mcs51_newest_qingcloud_index.json
+> https://cos.thinkcreate.us/package_ch55xduino_mcs51_newest_cloudflare_index.json
 
 as an *Additional Boards Manager URL*.
 
