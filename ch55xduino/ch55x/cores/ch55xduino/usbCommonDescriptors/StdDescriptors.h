@@ -116,9 +116,11 @@
  * with.
  */
 #define USB_STRING_DESCRIPTOR(String)                                          \
-  {.Header = {.Size = sizeof(USB_Descriptor_Header_t) + (sizeof(String) - 2),  \
-              .Type = DTYPE_String},                                           \
-   .UnicodeString = String}
+  {                                                                            \
+    .Header = {.Size = sizeof(USB_Descriptor_Header_t) + (sizeof(String) - 2), \
+               .Type = DTYPE_String},                                          \
+    .UnicodeString = String                                                    \
+  }
 
 /** Convenience macro to easily create \ref USB_Descriptor_String_t instances
  * from an array of characters.
