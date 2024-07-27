@@ -1,0 +1,46 @@
+name: compile all sketches
+
+on: [pull_request, push]
+
+jobs:
+  arduino-cli_compile_all:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # On 20240702, repo was installed at /home/runner/work/ch55xduino/ch55xduino
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # On 20240702, cli was installed at /opt/hostedtoolcache/arduino-cli/1.0.3/x64/arduino-cli
+    - name: Install Arduino CLI
+      uses: arduino/setup-arduino-cli@v2
+
+    - name: Add JSON URL to Arduino CLI config
+      run: arduino-cli config init; arduino-cli config add board_manager.additional_urls https://raw.githubusercontent.com/DeqingSun/ch55xduino/ch55xduino/package_ch55xduino_mcs51_index.json
+
+    - name: Update index of available boards
+      run: arduino-cli core update-index
+
+    - name: Install Ch55xduino board
+      run: arduino-cli core install CH55xDuino:mcs51
+
+    - name: get core version and copy package from repo to arduino-cli location
+      run: |
+        CH55XDUINO_VER=$(arduino-cli core list | grep 'CH55xDuino:mcs51' | awk '{print $2}')
+        echo "CH55xDuino:mcs51 version: $CH55XDUINO_VER"
+        cp -rf $GITHUB_WORKSPACE/ch55xduino/ch55x/* $HOME/.arduino15/packages/CH55xDuino/hardware/mcs51/$CH55XDUINO_VER/
+
+    - name: build all with python script
+      run: |
+        python3 $GITHUB_WORKSPACE/util/action_compile_all.py $GITHUB_WORKSPACE/ch55xduino/ch55x/libraries/Generic_Examples/examples
+
+    - name: prepare build artifacts
+      run: |
+        find $GITHUB_WORKSPACE/ch55xduino/ch55x/libraries/Generic_Examples/examples/compiled_hex/ -type f -not -name "*.hex" -exec rm -f {} \;
+        tar -cvf compiled_hex.tar -C $GITHUB_WORKSPACE/ch55xduino/ch55x/libraries/Generic_Examples/examples/compiled_hex/ .
+    
+    - name: upload build artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: compiled_hex
+        path: compiled_hex.tar
