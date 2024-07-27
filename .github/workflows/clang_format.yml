@@ -8,6 +8,9 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
+
+    - name: print clang format version
+      run: clang-format --version
    
     - name: clang format
       run: python util/run-clang-format.py -r . 
