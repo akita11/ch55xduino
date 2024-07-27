@@ -14,6 +14,8 @@ extern __xdata __at (EP2_ADDR) uint8_t Ep2Buffer[];
 extern __xdata __at (EP3_ADDR) uint8_t Ep3Buffer[];
 // clang-format on
 
+extern __xdata uint8_t keyboardLedStatus;
+
 volatile __xdata uint8_t UpPoint3_Busy =
     0; // Flag of whether upload pointer is busy
 
@@ -283,6 +285,7 @@ void Keyboard_print(const char *str) {
   }
 }
 
-/*uint8_t Keyboard_getLEDStatus() {
-  return Ep3Buffer[0]; // The only info we gets
-}*/
+uint8_t Keyboard_getLEDStatus() {
+  // keyboardLedStatus is updated from USB_EP0_OUT
+  return keyboardLedStatus;
+}
