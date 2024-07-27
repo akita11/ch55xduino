@@ -288,6 +288,14 @@ uint8_t Keyboard_write(__data uint8_t c) {
             // returns 1
 }
 
+void Keyboard_print(const char *str) {
+  // using a generic pointer to handle pointer in any address space
+  __data uint8_t c;
+  while ((c = *str++)) {
+    Keyboard_write(c);
+  }
+}
+
 uint8_t Keyboard_getLEDStatus() {
   return Ep1Buffer[0]; // The only info we gets
 }
