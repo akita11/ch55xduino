@@ -359,8 +359,9 @@ void USB_EP0_IN() {
   } else {
     switch (SetupReq) {
     case USB_GET_DESCRIPTOR: {
-      __data uint8_t len = SetupLen >= DEFAULT_ENDP0_SIZE ? DEFAULT_ENDP0_SIZE
-                                                   : SetupLen; // send length
+      __data uint8_t len = SetupLen >= DEFAULT_ENDP0_SIZE
+                               ? DEFAULT_ENDP0_SIZE
+                               : SetupLen; // send length
       for (__data uint8_t i = 0; i < len; i++) {
         Ep0Buffer[i] = pDescr[i];
       }

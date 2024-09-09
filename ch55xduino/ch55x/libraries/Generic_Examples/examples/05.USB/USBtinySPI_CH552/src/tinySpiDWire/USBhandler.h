@@ -20,7 +20,8 @@ extern __data uint8_t SetupReq;
 volatile extern __xdata uint8_t UsbConfig;
 extern const __code uint8_t *__data pDescr;
 
-extern volatile __data uint8_t usbMsgFlags; // uint8_t usbMsgFlags copied from VUSB
+extern volatile __data uint8_t
+    usbMsgFlags; // uint8_t usbMsgFlags copied from VUSB
 #define USB_FLG_USE_USER_RW (1 << 0)
 #define USB_FLG_DW_IN (1 << 1)
 #define USB_FLG_DW_OUT (1 << 2)

@@ -25,8 +25,9 @@ volatile __data uint8_t jobState = 0;
 // ----------------------------------------------------------------------
 // debugWIRE support
 volatile __xdata uint8_t dwBuf[128];
-volatile __data uint8_t dwLen;       // Length being received from host or avr device
-volatile __data uint8_t dwState = 0; // Current debugWIRE action underway, 0 if none
+volatile __data uint8_t dwLen; // Length being received from host or avr device
+volatile __data uint8_t dwState =
+    0; // Current debugWIRE action underway, 0 if none
 volatile __xdata uint16_t
     dwBitTime; // Each bit takes 4*dwBitTime+8 cycles to transmit
 volatile __xdata uint16_t dwselfCalcBitTime; // Each bit use T2 to transmit

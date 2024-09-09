@@ -6,14 +6,14 @@
 
 volatile __xdata uint8_t ledState;
 
-volatile __data uint8_t sck_period = 10;  // SCK period in microseconds (1..250)
-volatile __data uint8_t poll1;            // first poll byte for write
-volatile __data uint8_t poll2;            // second poll byte for write
-volatile __xdata uint16_t address; // read/write address
-volatile __xdata uint16_t timeout; // write timeout in usec
-volatile __data uint8_t cmd0;             // current read/write command byte
-volatile __xdata uint8_t cmd[4];   // SPI command buffer
-volatile __xdata uint8_t res[4];   // SPI result buffer
+volatile __data uint8_t sck_period = 10; // SCK period in microseconds (1..250)
+volatile __data uint8_t poll1;           // first poll byte for write
+volatile __data uint8_t poll2;           // second poll byte for write
+volatile __xdata uint16_t address;       // read/write address
+volatile __xdata uint16_t timeout;       // write timeout in usec
+volatile __data uint8_t cmd0;            // current read/write command byte
+volatile __xdata uint8_t cmd[4];         // SPI command buffer
+volatile __xdata uint8_t res[4];         // SPI result buffer
 
 extern __xdata uint8_t debugWireAutoQuit;
 
@@ -169,8 +169,8 @@ uint16_t tinySpiSetupHandler() {
 void tinySpiInHandler() {
   __data uint8_t i;
   __data uint16_t returnLen = SetupLen >= DEFAULT_ENDP0_SIZE
-                           ? DEFAULT_ENDP0_SIZE
-                           : SetupLen; // 本次传输长度
+                                  ? DEFAULT_ENDP0_SIZE
+                                  : SetupLen; // 本次传输长度
   for (i = 0; i < returnLen; i++) {
     spi_rw();
     Ep0Buffer[i] = res[3];
@@ -185,8 +185,8 @@ void tinySpiOutHandler() {
   __data uint8_t i;
   __data uint8_t r;
   __data uint16_t returnLen = SetupLen >= DEFAULT_ENDP0_SIZE
-                           ? DEFAULT_ENDP0_SIZE
-                           : SetupLen; // 本次传输长度
+                                  ? DEFAULT_ENDP0_SIZE
+                                  : SetupLen; // 本次传输长度
   for (i = 0; i < returnLen; i++) {
     cmd[3] = Ep0Buffer[i];
     spi_rw();
