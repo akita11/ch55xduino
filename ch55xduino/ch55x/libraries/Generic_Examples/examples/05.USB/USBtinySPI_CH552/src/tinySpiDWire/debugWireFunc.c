@@ -198,21 +198,30 @@ void dwCaptureWidths() { // TODO: Seems only capture max 4ms wait. Not working
   TR2 = 0;
 
   // calc dwselfCalcBitTime
+  // dwBuf was used as temp buffer, storing the pulse width for 9 falling/rising
+  // after break signal. we do an average of the pulse width, and then convert
+  // it to bit time.
   {
     __xdata uint32_t dwSum; // same iRam
     __data uint8_t i;
     dwSum = 0;
     if (dwLen >= 18) {
       for (i = (dwLen - 18); i < (dwLen); i += 2) {
-        dwSum = dwSum + *((uint16_t *)(&dwBuf[i]));
+        /// pointer physically in data ram pointing to xdata
+        dwSum = dwSum + *((__xdata uint16_t * __data)(&dwBuf[i]));
       }
       dwselfCalcBitTime = dwSum / 9;
+      // for 24M CH552 and 16M Arduino Uno. The datarate is 125K and the
+      // dwselfCalcBitTime is mesured to be 0xC1 So 24M/(193-1) = 125K.
     }
 
     // send calcuted value to mimic attiny
+    // the SetDwireBaud in dwire would do 16.5M/(6*data+8) for baud rate
+
     for (i = 0; i < (dwLen); i += 2) {
-      uint16_t *dataPtr = ((uint16_t *)(&dwBuf[i]));
-      *dataPtr = ((33 * (*dataPtr) / 48) - 8) / 6;
+      __xdata uint16_t *__data dataPtr = ((uint16_t *)(&dwBuf[i]));
+#define CLOCK_IN_MHZ (F_CPU / 1000000)
+      *dataPtr = ((33 * ((*dataPtr)) / (2 * CLOCK_IN_MHZ)) - 8) / 6;
     }
   }
 }
@@ -486,7 +495,7 @@ endOfDwReceive:
   EA = 1; // enable Interrupt
 }
 
-void dwWaitForBitInterruptInit() {
+inline void dwWaitForBitInterruptInit() {
   dwBuf[0] = 0;
   dwLen = 1;
   P1_DIR_PU &= ~((1 << 1));
@@ -530,7 +539,7 @@ void dwSendBytesInterruptInit() {
   ET2 = 1;
 }
 
-void dwReadBytesInterruptInit() {
+inline void dwReadBytesInterruptInit() {
   dwLen = 0;
 
   TR2 = 0;
@@ -585,7 +594,7 @@ void dwWaitForBitInterrupt() {
   dwWaitForBitInterruptInit();
 }
 
-void timer2IntrHandler() {
+void Timer2Interrupt(void) __interrupt(INT_NO_TMR2) {
   if (TF2) {
     TF2 = 0;
     if (dwInterrputStatus & DWIO_SEND_BYTES) { // send bytes
@@ -621,7 +630,6 @@ void timer2IntrHandler() {
       }
 
     } else if (dwInterrputStatus & DWIO_READ_BYTES) {
-      __data uint8_t dataBuffer = P1_1;
       if (dwTXbitCount == 0xFF) { // not get the first bit, timeout
         EXEN2 = 0;
         ET2 = 0;
@@ -631,12 +639,15 @@ void timer2IntrHandler() {
         }
       } else if (dwTXbitCount >= 8) {
 
-        EXEN2 = 1; // ready to capture next falling edge
+        EXEN2 = 1;    // ready to capture next falling edge
+        TL2 = RCAP2L; // give timer a bit extra time to capture
+        TH2 = RCAP2H;
         dwTXbitCount = 0xFF;
 
       } else {
+        __data uint8_t dataBufferRead = P1_1;
         dwTXRXBuf >>= 1;
-        if (dataBuffer)
+        if (dataBufferRead)
           dwTXRXBuf |= (1 << 7);
         if (dwTXbitCount == 7) {
           dwBuf[dwLen] = dwTXRXBuf;
