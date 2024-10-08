@@ -53,7 +53,7 @@ jobs:
         tar -cvf compiled_hex.tar -C $GITHUB_WORKSPACE/ch55xduino/ch55x/libraries/Generic_Examples/examples/compiled_hex/ .
     
     - name: upload build artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: compiled_hex
         path: compiled_hex.tar
