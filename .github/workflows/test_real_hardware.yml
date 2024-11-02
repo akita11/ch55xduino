@@ -1,0 +1,76 @@
+name: run on real hardware
+
+on: [push]
+
+jobs:
+
+
+
+  arduino-cli_compile_all_and_test:
+    runs-on: self-hosted
+    
+    steps:
+    # On 20241101, repo was installed at self-hosted runner _work/ch55xduino/ch55xduino
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # On 20241101, cli was installed at self-hosted runner _work/_tool/arduino-cli/1.0.4/arm64/arduino-cli
+    - name: Install Arduino CLI
+      uses: arduino/setup-arduino-cli@v2
+
+    # # on 20241101, pwd is _work/ch55xduino/ch55xduino
+    # - name: pwd
+    #   run: pwd
+
+    # # on 20241101, $RUNNER_TEMP is _work/_temp This directory is emptied at the beginning and end of each job.
+    # - name: echo runner temp dir
+    #   run: echo $RUNNER_TEMP
+
+    - name: Init Arduino CLI config
+      run: arduino-cli config init --config-dir "$RUNNER_TEMP/arduino_config"
+
+    - name: Add JSON URL to Arduino CLI config
+      run: arduino-cli config --config-dir "$RUNNER_TEMP/arduino_config" add board_manager.additional_urls https://raw.githubusercontent.com/DeqingSun/ch55xduino/ch55xduino/package_ch55xduino_mcs51_index.json
+
+    - name: Update index of available boards
+      run: arduino-cli core --config-dir "$RUNNER_TEMP/arduino_config" update-index
+
+    - name: Install Ch55xduino board
+      run: arduino-cli core --config-dir "$RUNNER_TEMP/arduino_config" install CH55xDuino:mcs51
+
+    - name: get core version and copy package from repo to arduino-cli location
+      run: |
+        CH55XDUINO_VER=$(arduino-cli core --config-dir "$RUNNER_TEMP/arduino_config" list | grep 'CH55xDuino:mcs51' | awk '{print $2}')
+        echo "CH55xDuino:mcs51 version: $CH55XDUINO_VER"
+        cp -rf $GITHUB_WORKSPACE/ch55xduino/ch55x/* $RUNNER_TEMP/arduino_config/packages/CH55xDuino/hardware/mcs51/$CH55XDUINO_VER/
+
+    # # on 20241101, $GITHUB_WORKSPACE is _work/ch55xduino/ch55xduino
+    # - name: show the github repo location
+    #   run: echo $GITHUB_WORKSPACE
+
+    # the compiled hex will be stored in $GITHUB_WORKSPACE/ch55xduino/ch55x/libraries/Generic_Examples/examples/compiled_hex/
+    - name: build all with python script
+      run: |
+        python3 $GITHUB_WORKSPACE/util/action_compile_all.py $GITHUB_WORKSPACE/ch55xduino/ch55x/libraries/Generic_Examples/examples $RUNNER_TEMP/arduino_config
+
+    #checkout https://github.com/DeqingSun/CH552-Automatic-Test-Jig for test scripts, this will make the CH552-Automatic-Test-Jig inside the local copy of the CH55xDuino repo
+    - name: Checkout test scripts
+      uses: actions/checkout@v4
+      with:
+        repository: DeqingSun/CH552-Automatic-Test-Jig
+        path: CH552-Automatic-Test-Jig
+
+    - name: run test scripts
+      run: |
+        python3 $GITHUB_WORKSPACE/CH552-Automatic-Test-Jig/python/selfhost_runner_test.py $GITHUB_WORKSPACE/ch55xduino/ch55x/libraries/Generic_Examples/examples/compiled_hex $GITHUB_WORKSPACE/CH552-Automatic-Test-Jig/python/sketchTestCode $GITHUB_WORKSPACE/ch55xduino/tools/linux_arm/vnproch55x
+
+    # - name: prepare build artifacts
+    #   run: |
+    #     find $GITHUB_WORKSPACE/ch55xduino/ch55x/libraries/Generic_Examples/examples/compiled_hex/ -type f -not -name "*.hex" -exec rm -f {} \;
+    #     tar -cvf compiled_hex.tar -C $GITHUB_WORKSPACE/ch55xduino/ch55x/libraries/Generic_Examples/examples/compiled_hex/ .
+    
+    # - name: upload build artifacts
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: compiled_hex
+    #     path: compiled_hex.tar

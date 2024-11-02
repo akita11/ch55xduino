@@ -13,6 +13,11 @@ if not os.path.isdir(example_folder):
     print(f"example search directory not found at {example_folder}")
     exit(1)
 
+arduino_package_path = ""
+if len(sys.argv) >= 3:
+    #the second argument is the path to the arduino package
+    arduino_package_path = "--config-dir " + sys.argv[2]
+
 compiled_hex_folder = os.path.join(example_folder, "compiled_hex")
 if not os.path.isdir(compiled_hex_folder):
     os.makedirs(compiled_hex_folder)
@@ -43,7 +48,7 @@ for example_directory in example_directories:
                     board_options_string = '--board-options '+row.replace('cli board options:', '').strip()
                     break
 
-    build_cmd = f"arduino-cli compile --fqbn CH55xDuino:mcs51:ch552 --output-dir {compiled_hex_folder} {example_directory}"
+    build_cmd = f"arduino-cli compile {arduino_package_path} --fqbn CH55xDuino:mcs51:ch552 --output-dir {compiled_hex_folder} {example_directory}"
     if board_options_string != "":
         build_cmd = build_cmd + " " + board_options_string
     example_name = os.path.basename(example_directory)
