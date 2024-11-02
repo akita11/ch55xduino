@@ -49,6 +49,8 @@ for example_directory in example_directories:
                     break
 
     build_cmd = f"arduino-cli compile {arduino_package_path} --fqbn CH55xDuino:mcs51:ch552 --output-dir {compiled_hex_folder} {example_directory}"
+    #if there are two consecutive spaces, remove them
+    build_cmd = build_cmd.replace("  ", " ")
     if board_options_string != "":
         build_cmd = build_cmd + " " + board_options_string
     example_name = os.path.basename(example_directory)
