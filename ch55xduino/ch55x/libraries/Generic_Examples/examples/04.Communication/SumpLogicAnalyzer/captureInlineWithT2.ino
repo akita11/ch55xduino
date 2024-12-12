@@ -71,18 +71,18 @@ void captureInlineWithT2() {
 
   //a5-> MOVX @DPTR1,A & INC DPTR1
 
-  //===768 pairs
+  //===740 pairs
 
   TR2 = 1;
-  uint8_t i = 192;
+  uint8_t i = 185;
 
 #define INLINE_CAPTURE1   __asm__("  mov a,_P1 \n  swap a \n mov @r0,a \n " );
 #define INLINE_CAPTURE2   __asm__("  mov a,_P1 \n  xchd A,@r0 \n  .db #0xa5 \n" );
 
 
-  __asm__("  mov r6,#192      \n"
+  __asm__("  mov r6,#185      \n"
 
-          ".odd \n loop8Samples$:    \n" //even address is faster, not sure why need odd.
+          ".even \n loop8Samples$:    \n" //new linking file ensured each file start at even address, so even in one file is even in final, faster for jnz 
 
           "  mov a,_P1 \n  swap a \n mov @r0,a \n "
           "waitTF2_1$: \n  jnb _TF2,waitTF2_1$ \n  clr _TF2 \n"
@@ -114,7 +114,7 @@ void captureInlineWithT2() {
           "  jnz loop8Samples$\n");
 
 
-  //===768 pairs end
+  //===740 pairs end
 
 
   // re-enable interrupts now that we're done sampling.

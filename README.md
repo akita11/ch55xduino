@@ -20,6 +20,14 @@ Start the Arduino-IDE. In *File->Preferences*, *Settings* tab, enter
 
 > https://raw.githubusercontent.com/DeqingSun/ch55xduino/ch55xduino/package_ch55xduino_mcs51_index.json
 
+### Installation without direct Github access
+
+If you can not access github directly, use this link to COS server on Cloudflare.
+
+如果你无法直接连接Github下载Arduino支持包，请在Arduino中使用以下链接。
+
+> https://cos.thinkcreate.us/package_ch55xduino_mcs51_newest_cloudflare_index.json
+
 as an *Additional Boards Manager URL*.
 
 * Open *Tools->Board:...->Boards Manager*
@@ -37,12 +45,6 @@ Now you should find a new entry *CH55x Boards* in the list at
 * If your board is never used with ch55xduino before, you need to make the ch55x chip enter bootloader mode. You need to disconnect USB and unpower ch55x, connect the pull-up resistor on D+ line (generally a 10K resistor between D+ and 5V, controlled by a push-button or adjacent pads). Then you connect USB. and hit *Upload*. Also, a blank new chip will enter the bootloader automatically.
 * If you have used ch55xduino once and your code doesn't crash the USB subsystem, you can simply press *Upload*. Arduino and the firmware will kick the chip into the bootloader automatically.
 
-### Installation without Github access
-
-If you can not access github directly, use this link to a proxy instead.
-
-> https://gh-proxy.deqing.workers.dev/raw.githubusercontent.com/DeqingSun/ch55xduino/playground/mirror/package_ch55xduino_mcs51_proxy_index.json
-
 ### USB and Serial upload
 
 Ch55xduino supports both USB and Serial upload methods. If the USB port of the CH55x chip is connected to a host computer, the USB method is recommended.
@@ -53,19 +55,27 @@ If you want to leave the bootloader, you may send the following bytes at 57600 b
 
 ### Driver for windows
 
-![Zadig image](https://raw.githubusercontent.com/DeqingSun/ch55xduino/ch55xduino/docs/Zadig_bootloader_libusb.png)
+Since 0.0.10, if your Windows automatically installed the driver from wch.cn for the bootloader (4348,55E0), that is fine. The current upload tool can use the default CH375 driver and co-exist with the official [WCHISPTool](http://www.wch.cn/downloads/WCHISPTool_Setup_exe.html).
 
-[Zadig](https://zadig.akeo.ie/) is the recommended tool to install drivers in Windows. The bootloader (4348,55E0) should be installed with libusb-win32 driver (WinUSB driver may not work on some computer). 
+If you need to use WinUSB or libusb-win32, the tool will still work.
+
+You can use USB Serial (CDC) driver for the default CDC USB stack (1209,C550). Use [Zadig](https://zadig.akeo.ie/) to install the driver if it did not install automatically.
 
 ![Zadig CDC image](https://raw.githubusercontent.com/DeqingSun/ch55xduino/ch55xduino/docs/Zadig_CDC.png)
-
-You can use USB Serial (CDC) driver for the default CDC USB stack (1209,C550). 
 
 If you tried to emulate another type of USB device without changing the PID/VID, you may need to uninstall the device before installing a new driver.
 
 ### Permission for Linux
 
 By default, Linux will not expose enough permission for Arduino to upload the code with the USB bootloader. Copy ```99-ch55xbl.rules``` in this repo to ```/etc/udev/rules.d/``` and restart your computer. Otherwise, the upload tool may not find the bootloader device.
+
+## Examples for CH55xduino
+
+CH55xduino did not define LED_BUILTIN, A0, A1, etc. So you may encounter compilation errors when the offical Arduino examples are compiled. 
+
+Please use the provided examples in "Examples for CH552 Board" -> "Generic_Examples". 
+
+![location of example](https://raw.githubusercontent.com/DeqingSun/ch55xduino/ch55xduino/docs/exampleLocation.png)
 
 ## Reference board
 
@@ -97,38 +107,31 @@ There is no Analog Pin definition such as A0. Just use 11, 14, 15, or 32 for the
 
 ### No polymorph functions:
 
-There is no free C++ compiler for MCS51 chip, we can not use polymorph functions. So you can not expect the compiler will choose a function according to the parameter's type. 
+There is no free C++ compiler for MCS51 chip, we can not use polymorph functions. However, since commit 13402 of SDCC, the generic selection is functional. Ch55xduino supports generic selection since 0.0.11.
 
-The biggest difference may be the ```Serial.print``` function. Here is what you should do in CH55xduino
+If you are using a version higher than 0.0.11, the print function can choose a function according to the parameter's type. 
 
-| datatype | Print on USB | Println on USB | Print on UART0 | Println on UART0 |
-|----------|--------------|----------------|----------------|------------------|
-| int      | USBSerial\_print\_i(P) | USBSerial\_println\_i(P) | Serial0\_print\_i(P) | Serial0\_println\_i(P) |
-| unsigned | USBSerial\_print\_u(P) | USBSerial\_println\_u(P) | Serial0\_print\_u(P) | Serial0\_println\_u(P) |
-| float    | USBSerial\_print\_f(P) | USBSerial\_println\_f(P) | Serial0\_print\_f(P) | Serial0\_println\_f(P) |
-| float with precision | USBSerial\_print\_f(P,Q) | USBSerial\_println\_f(P,Q) | Serial0\_print\_f(P,Q) | Serial0\_println\_f(P,Q) |
-| char     | USBSerial\_print\_c(P) | USBSerial\_println\_c(P) | Serial0\_print\_c(P) | Serial0\_println\_c(P) |
-| char * (str)  | USBSerial\_print\_s(P) | USBSerial\_println\_s(P) | Serial0\_print\_s(P) | Serial0\_println\_s(P) |
-| char array with length | USBSerial\_print\_sn(P,Q) | USBSerial\_println\_sn(P,Q) | Serial0\_print\_sn(P,Q) | Serial0\_println\_sn(P,Q) |
-| int with base | USBSerial\_print\_ub(P,Q) | USBSerial\_println\_ub(P,Q) | Serial0\_print\_ub(P,Q) | Serial0\_println\_ub(P,Q) |
+For example. If you want to print to the USB-CDC virtual serial port, you can do:
 
-They are defined in ```Arduino.h```.
+```
+USBSerial_print(val);	//val: the value to print - any data type
+USBSerial_print(val, format)	//specifies the number base (for integral data types) or number of decimal places (for floating point types)
+USBSerial_print(charPointer, length)	//specifies the string length to be printed 
+```
+
+It is also possible to do ``` USBSerial_println ```. If you want to print to Serial0 or Serial1, just use ``` Serial0_print ``` or ``` Serial1_print ```.
+
+Please note if you pass a character in single quotes, such as ```USBSerial_print(',');```, you will get ```44```. Because that char got promoted to integer type. You need to either use ```USBSerial_print((char)',');``` or ```USBSerial_print(",");```.
+
+They are defined in ```genericPrintSelection.h```.
 
 ### Memory model:
 
 Unlike most modern architectures including AVR, MCS51 has 2 RAM regions, internal data memory, and external data memory. For CH552, the internal one is only 256 bytes, and the external one is 1024 bytes.
 
-CH55xduino uses the default Small Model for SDCC memory models. The small memory model will allocate all variables in internal, directly addressable RAM by default. Variables stored in external RAM must be declared with the ```xdata``` or ```far``` keyword. 
+CH55xduino uses the Large Model for SDCC memory models since version 0.0.17. The Large model will allocate all variables in external RAM by default. Variables stored in internal RAM must be declared with the ```__data``` keyword. 
 
-CH55xduino also put the stack in internal RAM. So there isn't much space left for variables. If your variable doesn't need fast access, use ```__xdata``` when you declare it.  
-
-For example, if you are trying to allocate a lot of space in internal RAM.
-
-```uint8_t testArr[128];```
-
-You will trigger an error. ```?ASlink-Error-Could not get 130 consecutive bytes in internal RAM for area DSEG.``` This can be avoided by using
-
-```__xdata uint8_t testArr[128];```
+CH55xduino put the stack in internal RAM. So there isn't much space left for variables. If your variable does need fast access, use ```__data``` when you declare it.  
 
 For the default Arduino setting, 148 bytes are reserved for USB endpoints. There will be 876 bytes usable for external RAM.
 
@@ -155,6 +158,10 @@ Most parts of the Arduino core system and some Arduino libraries are already por
 #### Communication
 
 * SPI: Real hardware-SPI up to 12MHz.
+
+* SoftI2C: Bit-Bang I2C on any 2 pins.
+
+* WS2812: Bit-Bang WS2812 on any pin. Note some compatible LEDs have different timing and some tweak may be needed. 
 
 #### Sensors
 
