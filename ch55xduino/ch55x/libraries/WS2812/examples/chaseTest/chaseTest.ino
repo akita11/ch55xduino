@@ -4,9 +4,10 @@
 #define COLOR_PER_LEDS 3
 #define NUM_BYTES (NUM_LEDS*COLOR_PER_LEDS)
 
-#if NUM_BYTES > 255
-#error "NUM_BYTES can not be larger than 255."
-#endif
+// no limit over 256 bytes!
+//#if NUM_BYTES > 255
+//#error "NUM_BYTES can not be larger than 255."
+//#endif
 
 __xdata uint8_t ledData[NUM_BYTES];
 
